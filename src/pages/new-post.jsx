@@ -3,12 +3,14 @@ import { useLocation, Link } from "wouter";
 import { useCreatePost } from "@/lib/api";
 import { useAuth } from "@/context/auth";
 import { Layout } from "@/components/layout";
+import { Input } from "@/components/ui/Input";
+import { Label } from "@/components/ui/Label";
 
 const CATEGORIES = [
   { value: "announcement", label: "Announcement" },
-  { value: "study_group", label: "Study Group" },
-  { value: "event", label: "Event" },
-  { value: "lost_found", label: "Lost & Found" },
+  { value: "study_group",  label: "Study Group" },
+  { value: "event",        label: "Event" },
+  { value: "lost_found",   label: "Lost & Found" },
 ];
 
 export default function NewPost() {
@@ -33,7 +35,6 @@ export default function NewPost() {
   function handleSubmit(e) {
     e.preventDefault();
     setError("");
-
     if (!form.title.trim()) return setError("Please enter a title");
 
     const data = { ...form };
@@ -48,17 +49,20 @@ export default function NewPost() {
   if (!user) {
     return (
       <Layout>
-        <div className="max-w-sm mx-auto mt-16 text-center">
-          <h2 className="text-xl font-bold mb-3">Login required</h2>
-          <p className="text-gray-500 text-sm mb-6">
+        <div className="max-w-sm mx-auto mt-20 text-center">
+          <h2 className="font-display text-2xl font-bold mb-2">Login required</h2>
+          <p className="text-muted-foreground text-sm mb-6">
             You need to be logged in to create a post.
           </p>
-          <Link href="/login" className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
+          <Link
+            href="/login"
+            className="inline-block bg-primary text-primary-foreground px-6 py-2.5 rounded-xl font-medium hover:opacity-90 transition-opacity"
+          >
             Log in
           </Link>
-          <p className="text-sm text-gray-400 mt-4">
+          <p className="text-sm text-muted-foreground mt-4">
             No account?{" "}
-            <Link href="/signup" className="text-green-600 hover:underline">Sign up</Link>
+            <Link href="/signup" className="text-primary hover:underline">Sign up</Link>
           </p>
         </div>
       </Layout>
@@ -68,98 +72,114 @@ export default function NewPost() {
   return (
     <Layout>
       <div className="max-w-xl mx-auto pb-12">
-        <button onClick={() => setLocation("/")} className="mb-6 text-gray-500 hover:text-gray-700 text-sm">
+        <button
+          onClick={() => setLocation("/")}
+          className="mb-6 text-muted-foreground hover:text-foreground text-sm transition-colors"
+        >
           &larr; Back to board
         </button>
 
-        <h1 className="text-2xl font-bold mb-6">Create a New Post</h1>
+        <h1 className="font-display text-3xl font-bold mb-1">New Post</h1>
+        <p className="text-muted-foreground text-sm mb-7">Share something with your campus</p>
 
         {error && (
-          <p className="text-red-500 bg-red-50 border border-red-200 rounded p-3 mb-4 text-sm">{error}</p>
+          <div className="bg-destructive/10 border border-destructive/30 text-destructive rounded-xl px-4 py-3 mb-5 text-sm">
+            {error}
+          </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium mb-1">Category</label>
-            <select
-              name="category"
-              value={form.category}
-              onChange={handleChange}
-              className="border rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-green-400"
-            >
+            <Label className="mb-2 block">Category</Label>
+            <div className="flex flex-wrap gap-2">
               {CATEGORIES.map((c) => (
-                <option key={c.value} value={c.value}>{c.label}</option>
+                <button
+                  key={c.value}
+                  type="button"
+                  onClick={() => setForm({ ...form, category: c.value })}
+                  className={`px-4 py-1.5 rounded-full text-sm border transition-all duration-200 ${
+                    form.category === c.value
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "bg-card text-muted-foreground border-border hover:border-primary/40"
+                  }`}
+                >
+                  {c.label}
+                </button>
               ))}
-            </select>
+            </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Title *</label>
-            <input
+          <div className="space-y-1.5">
+            <Label htmlFor="title">Title *</Label>
+            <Input
+              id="title"
               type="text"
               name="title"
               value={form.title}
               onChange={handleChange}
               placeholder="What is this about?"
-              className="border rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-green-400"
+              className="rounded-xl"
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Description</label>
+          <div className="space-y-1.5">
+            <Label htmlFor="description">Description</Label>
             <textarea
+              id="description"
               name="description"
               value={form.description}
               onChange={handleChange}
               placeholder="Give more details..."
               rows={4}
-              className="border rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-green-400"
+              className="border border-input bg-background rounded-xl p-3 w-full text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-none"
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Posting as</label>
-            <input
-              type="text"
+          <div className="space-y-1.5">
+            <Label>Posting as</Label>
+            <Input
               value={user.username}
               disabled
-              className="border rounded-lg p-2 w-full bg-gray-50 text-gray-500 cursor-not-allowed"
+              className="rounded-xl bg-muted text-muted-foreground cursor-not-allowed"
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Contact Info</label>
-            <input
+          <div className="space-y-1.5">
+            <Label htmlFor="contactInfo">Contact Info</Label>
+            <Input
+              id="contactInfo"
               type="text"
               name="contactInfo"
               value={form.contactInfo}
               onChange={handleChange}
               placeholder="Email or phone number"
-              className="border rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-green-400"
+              className="rounded-xl"
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Location</label>
-            <input
+          <div className="space-y-1.5">
+            <Label htmlFor="location">Location</Label>
+            <Input
+              id="location"
               type="text"
               name="location"
               value={form.location}
               onChange={handleChange}
               placeholder="e.g. Library, Room 204"
-              className="border rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-green-400"
+              className="rounded-xl"
             />
           </div>
 
           {form.category === "event" && (
-            <div>
-              <label className="block text-sm font-medium mb-1">Event Date</label>
-              <input
+            <div className="space-y-1.5">
+              <Label htmlFor="eventDate">Event Date</Label>
+              <Input
+                id="eventDate"
                 type="date"
                 name="eventDate"
                 value={form.eventDate}
                 onChange={handleChange}
-                className="border rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-green-400"
+                className="rounded-xl"
               />
             </div>
           )}
@@ -167,7 +187,7 @@ export default function NewPost() {
           <button
             type="submit"
             disabled={createPost.isPending}
-            className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 disabled:opacity-50"
+            className="w-full bg-primary text-primary-foreground py-2.5 rounded-xl font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
           >
             {createPost.isPending ? "Posting..." : "Create Post"}
           </button>

@@ -23,26 +23,43 @@ export default function PostDetail() {
   }
 
   if (isLoading) {
-    return <Layout><p className="text-gray-500 mt-12">Loading post...</p></Layout>;
+    return (
+      <Layout>
+        <div className="max-w-2xl mx-auto mt-12 animate-pulse space-y-4">
+          <div className="h-4 bg-gray-200 rounded w-24" />
+          <div className="h-8 bg-gray-200 rounded w-3/4" />
+          <div className="h-4 bg-gray-200 rounded w-1/3" />
+          <div className="h-32 bg-gray-200 rounded-2xl" />
+        </div>
+      </Layout>
+    );
   }
 
   if (isError) {
     return (
       <Layout>
-        <p className="text-red-500 mt-12">Post not found.</p>
-        <button onClick={() => setLocation("/")} className="mt-4 text-green-600 text-sm">
-          &larr; Back to board
-        </button>
+        <div className="max-w-2xl mx-auto mt-12 text-center">
+          <p className="text-xl font-bold text-gray-900 mb-2">Post not found</p>
+          <button
+            onClick={() => setLocation("/")}
+            className="mt-4 text-green-600 text-sm hover:underline"
+          >
+            &larr; Back to board
+          </button>
+        </div>
       </Layout>
     );
   }
 
-  const isOwner = user && post && user.id === post.userId;
+  const isOwner = user && post && Number(user.id) === Number(post.userId);
 
   return (
     <Layout>
       <div className="max-w-2xl mx-auto pb-12">
-        <button onClick={() => setLocation("/")} className="mb-6 text-gray-500 hover:text-gray-700 text-sm">
+        <button
+          onClick={() => setLocation("/")}
+          className="mb-6 text-gray-500 hover:text-gray-800 text-sm transition-colors"
+        >
           &larr; Back to board
         </button>
 
@@ -50,28 +67,30 @@ export default function PostDetail() {
           <CategoryBadge category={post.category} />
         </div>
 
-        <h1 className="text-3xl font-bold mb-2">{post.title}</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-3 leading-tight">{post.title}</h1>
 
-        <p className="text-sm text-gray-500 mb-6">
-          Posted by{" "}
-          <span className="font-medium text-gray-800">{post.authorName}</span>
+        <div className="flex items-center gap-2 mb-7 text-sm text-gray-500">
+          <span>
+            Posted by{" "}
+            <span className="font-medium text-gray-800">{post.authorName}</span>
+          </span>
           {isOwner && (
-            <span className="ml-2 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
+            <span className="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-medium">
               your post
             </span>
           )}
-          {" · "}
-          {format(new Date(post.createdAt), "MMM d, yyyy")}
-        </p>
+          <span>·</span>
+          <span>{format(new Date(post.createdAt), "MMM d, yyyy")}</span>
+        </div>
 
         {post.description && (
-          <p className="text-gray-700 whitespace-pre-wrap mb-8 leading-relaxed">
+          <p className="text-gray-700 whitespace-pre-wrap mb-8 leading-relaxed text-base">
             {post.description}
           </p>
         )}
 
         {(post.location || post.eventDate || post.contactInfo) && (
-          <div className="bg-gray-50 border rounded-lg p-4 space-y-2 text-sm mb-8">
+          <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 space-y-2.5 text-sm mb-8">
             {post.eventDate && (
               <p>
                 <span className="font-medium">Date: </span>
@@ -97,7 +116,7 @@ export default function PostDetail() {
           <button
             onClick={handleDelete}
             disabled={deletePost.isPending}
-            className="text-red-500 border border-red-300 px-4 py-2 rounded-lg hover:bg-red-50 text-sm disabled:opacity-50"
+            className="text-red-500 border border-red-300 px-4 py-2 rounded-xl text-sm hover:bg-red-50 transition-colors disabled:opacity-50"
           >
             {deletePost.isPending ? "Deleting..." : "Delete this post"}
           </button>

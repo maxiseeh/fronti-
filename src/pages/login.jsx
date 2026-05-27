@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/context/auth";
 import { Layout } from "@/components/layout";
+import { Input } from "@/components/ui/Input";
+import { Label } from "@/components/ui/Label";
 
 export default function Login() {
   const [, setLocation] = useLocation();
@@ -40,51 +42,59 @@ export default function Login() {
 
   return (
     <Layout>
-      <div className="max-w-sm mx-auto mt-12">
-        <h1 className="text-2xl font-bold mb-2">Welcome back</h1>
-        <p className="text-gray-500 text-sm mb-6">Log in to post on Campus Board</p>
+      <div className="max-w-sm mx-auto mt-14">
+        <div className="mb-8">
+          <h1 className="font-display text-3xl font-bold text-foreground">Welcome back</h1>
+          <p className="text-muted-foreground text-sm mt-1">Log in to post on Campus Board</p>
+        </div>
 
         {error && (
-          <p className="text-red-500 bg-red-50 border border-red-200 rounded p-3 mb-4 text-sm">
+          <div className="bg-destructive/10 border border-destructive/30 text-destructive rounded-xl px-4 py-3 mb-5 text-sm">
             {error}
-          </p>
+          </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
-            <input
+          <div className="space-y-1.5">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
               type="email"
               name="email"
               value={form.email}
               onChange={handleChange}
               placeholder="you@example.com"
-              className="border rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-green-400"
+              className="rounded-xl"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
-            <input
+
+          <div className="space-y-1.5">
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
               type="password"
               name="password"
               value={form.password}
               onChange={handleChange}
               placeholder="Your password"
-              className="border rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-green-400"
+              className="rounded-xl"
             />
           </div>
+
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 disabled:opacity-50"
+            className="w-full bg-primary text-primary-foreground py-2.5 rounded-xl font-medium hover:opacity-90 transition-opacity disabled:opacity-50 mt-2"
           >
             {loading ? "Logging in..." : "Log In"}
           </button>
         </form>
 
-        <p className="text-sm text-gray-500 mt-6 text-center">
+        <p className="text-sm text-muted-foreground mt-6 text-center">
           Don't have an account?{" "}
-          <Link href="/signup" className="text-green-600 hover:underline">Sign up</Link>
+          <Link href="/signup" className="text-primary font-medium hover:underline">
+            Sign up
+          </Link>
         </p>
       </div>
     </Layout>

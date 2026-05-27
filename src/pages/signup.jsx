@@ -2,11 +2,13 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/context/auth";
 import { Layout } from "@/components/layout";
+import { Input } from "@/components/ui/Input";
+import { Label } from "@/components/ui/Label";
 
 export default function Signup() {
   const [, setLocation] = useLocation();
   const { setUser } = useAuth();
-  const [form, setForm] = useState({ username: "", email: "", password: "" });
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -46,54 +48,62 @@ export default function Signup() {
 
   return (
     <Layout>
-      <div className="max-w-sm mx-auto mt-12">
-        <h1 className="text-2xl font-bold mb-2">Create your account</h1>
-        <p className="text-gray-500 text-sm mb-6">Join Campus Board to post and connect</p>
+      <div className="max-w-sm mx-auto mt-14">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Create your account</h1>
+          <p className="text-gray-500 text-sm mt-1">Join Campus Board to post and connect</p>
+        </div>
 
         {error && (
-          <p className="text-red-500 bg-red-50 border border-red-200 rounded p-3 mb-4 text-sm">
+          <div className="bg-red-50 border border-red-200 text-red-600 rounded-xl px-4 py-3 mb-5 text-sm">
             {error}
-          </p>
+          </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Username</label>
-            <input
+          <div className="space-y-1.5">
+            <Label htmlFor="name">Name</Label>
+            <Input
+              id="name"
               type="text"
-              name="username"
-              value={form.username}
+              name="name"
+              value={form.name}
               onChange={handleChange}
-              placeholder="e.g. amina_w"
-              className="border rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-green-400"
+              placeholder="e.g. Amina Wanjiru"
+              className="rounded-xl"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
-            <input
+
+          <div className="space-y-1.5">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
               type="email"
               name="email"
               value={form.email}
               onChange={handleChange}
               placeholder="you@example.com"
-              className="border rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-green-400"
+              className="rounded-xl"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
-            <input
+
+          <div className="space-y-1.5">
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
               type="password"
               name="password"
               value={form.password}
               onChange={handleChange}
               placeholder="At least 6 characters"
-              className="border rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-green-400"
+              className="rounded-xl"
             />
           </div>
+
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 disabled:opacity-50"
+            className="w-full bg-green-600 text-white py-2.5 rounded-xl font-medium hover:bg-green-700 transition-colors disabled:opacity-50 mt-2"
           >
             {loading ? "Creating account..." : "Sign Up"}
           </button>
@@ -101,7 +111,9 @@ export default function Signup() {
 
         <p className="text-sm text-gray-500 mt-6 text-center">
           Already have an account?{" "}
-          <Link href="/login" className="text-green-600 hover:underline">Log in</Link>
+          <Link href="/login" className="text-green-600 font-medium hover:underline">
+            Log in
+          </Link>
         </p>
       </div>
     </Layout>
